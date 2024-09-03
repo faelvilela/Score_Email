@@ -18,6 +18,7 @@ if not file_path:
 conn = sqlite3.connect('Q:/TI/DB/EficazDB.db')
 cursor = conn.cursor()
 
+#Retira emails da planilha com contas que clicaram no link e atribuem a eles o score 5
 def score5():
     sheet_name = 'Cliques por link'
     df = pd.read_excel(file_path, sheet_name=sheet_name)
@@ -50,6 +51,7 @@ def score5():
     conn.commit()
     print('Score 5 OK')
 
+#Retira emails da planilha com contas que visualizaram o email e atribuem a eles o score 4
 def score4():
     sheet_name = 'Visualizações'
     df = pd.read_excel(file_path, sheet_name=sheet_name)
@@ -81,7 +83,8 @@ def score4():
 
     conn.commit()
     print('Score 4 OK')
-    
+
+#Retira emails da planilha com contas que não visualizaram ou teve algum erro de envio e atribui scores de 1 a 3 de acordo com o erro
 def scoreDiversos():
     sheet_name = 'Erros de recebimento'
     df = pd.read_excel(file_path, sheet_name=sheet_name)
@@ -131,6 +134,7 @@ backup('Q:/TI/DB/EficazDB.db', 'Z:/TI/DB_Backup/backup_meu_banco_de_dados.db')
 scoreDiversos()
 score4()
 score5()
+#Combinando dados do banco do CRM com o nosso banco
 data = consultaCob() #Realiza a consulta no postegreSQL (COB) e atribui para data
 CombinaConsultas(data, conn) #Combina e concatena os dados dos cliente com o COB e o nosso banco SQlite
 #imprimir(cursor, conn)
